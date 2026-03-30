@@ -1,0 +1,45 @@
+stages:
+  download_data:
+    cmd: python src/download_data.py
+    deps:
+      - src/download_data.py
+    outs:
+      - data/penguins.csv
+
+  prepare_data:
+    cmd: python src/prepare_data.py
+    deps:
+      - src/prepare_data.py
+      - data/penguins.csv
+      - params.yaml
+    outs:
+      - data/train.csv
+      - data/test.csv
+      - models/encoder.pkl
+
+  train_model:
+    cmd: python src/train_model.py
+    deps:
+      - src/train_model.py
+      - data/train.csv
+      - params.yaml
+    outs:
+      - models/model.pkl
+      - models/best_params.pkl
+
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+      - src/evaluate.py
+      - data/test.csv
+      - models/model.pkl
+      - models/best_params.pkl
+    metrics:
+      - metrics.json
+
+  register_bentoml:
+    cmd: python src/register_bentoml.py
+    deps:
+      - src/register_bentoml.py
+      - models/model.pkl
+      - models/encoder.pkl

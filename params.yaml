@@ -1,0 +1,8 @@
+prepare:
+  test_size: 0.2
+  random_state: 42
+
+train:
+  n_trials: 20
+  cv_folds: 5
+  random_state: 42
